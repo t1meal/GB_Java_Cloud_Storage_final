@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.gb.network-storage</groupId>
+        <artifactId>root</artifactId>
+        <version>DEV-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>client</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <javafx.version>18.0.1</javafx.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>ru.gb.network-storage</groupId>
+            <artifactId>commons</artifactId>
+            <version>DEV-SNAPSHOT</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.openjfx</groupId>-->
+<!--            <artifactId>javafx</artifactId>-->
+<!--            <version>${javafx.version}</version>-->
+<!--            <scope>runtime</scope>-->
+<!--            <type>pom</type>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.openjfx</groupId>-->
+<!--            <artifactId>javafx-controls</artifactId>-->
+<!--            <version>${javafx.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.openjfx</groupId>-->
+<!--            <artifactId>javafx-fxml</artifactId>-->
+<!--            <version>${javafx.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.openjfx</groupId>-->
+<!--            <artifactId>javafx-graphics</artifactId>-->
+<!--            <version>${javafx.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.openjfx</groupId>-->
+<!--            <artifactId>javafx-base</artifactId>-->
+<!--            <version>${javafx.version}</version>-->
+<!--        </dependency>-->
+
+    </dependencies>
+
+</project>

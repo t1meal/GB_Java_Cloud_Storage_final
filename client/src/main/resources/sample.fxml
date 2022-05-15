@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0"
+            prefWidth="700.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/11.0.14-internal"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.storage.client.MainController">
+
+    <AnchorPane fx:id="AuthorizationPane" layoutX="250.0" layoutY="100.0" managed="true" prefHeight="230.0"
+                prefWidth="200.0" style="-fx-background-color: white;" visible="true">
+        <TextField fx:id="loginField" layoutX="25.0" layoutY="100.0" promptText="login...."/>
+        <PasswordField fx:id="passwordField" layoutX="25.0" layoutY="137.0" promptText="password..."/>
+        <Button layoutX="49.0" layoutY="180.0" mnemonicParsing="false" onAction="#tryToAuth"
+                prefHeight="26.0" prefWidth="102.0" text="Авторизоватся"/>
+        <Label alignment="CENTER" layoutY="57.0" prefHeight="43.0" prefWidth="200.0" text="Введите свой логин и пароль"
+               textAlignment="CENTER">
+            <font>
+                <Font name="Monotype Corsiva" size="15.0"/>
+            </font>
+        </Label>
+        <Label alignment="CENTER" layoutX="10.0" layoutY="14.0" prefHeight="43.0" prefWidth="179.0" text="Авторизация"
+               textAlignment="CENTER">
+            <font>
+                <Font name="Monotype Corsiva" size="28.0"/>
+            </font>
+        </Label>
+    </AnchorPane>
+
+    <AnchorPane fx:id="WorkingPane" layoutX="20.0" layoutY="20.0" managed="false" prefHeight="420.0" prefWidth="650.0"
+                style="-fx-background-color: #C0C0C0;" visible="false">
+        <TableView fx:id="clientTable" layoutX="14.0" layoutY="55.0" prefHeight="340.0" prefWidth="310.0"/>
+        <TableView fx:id="cloudTable" layoutX="330.0" layoutY="55.0" prefHeight="340.0" prefWidth="310.0"/>
+        <Button layoutX="250.0" layoutY="395.0" mnemonicParsing="false" onAction="#sendToCloud" text="Отправить"/>
+        <Button layoutX="330.0" layoutY="395.0" mnemonicParsing="false" onAction="#downloadFromCloud" text="Скачать"/>
+        <Button layoutX="14.0" layoutY="395.0" mnemonicParsing="false" onAction="#deleteClientFile" text="Удалить"/>
+        <Button layoutX="575.0" layoutY="395.0" mnemonicParsing="false" onAction="#deleteCloudFile" text="Удалить"/>
+        <Button layoutX="275.0" layoutY="30.0" mnemonicParsing="false" onAction="#upToClientDirectory" text="Вверх"/>
+        <Button layoutX="585.0" layoutY="30.0" mnemonicParsing="false" onAction="#upToCloudDirectory" text="Вверх"/>
+        <Label layoutX="440.0" text="Облако">
+            <font>
+                <Font size="20.0"/>
+            </font>
+        </Label>
+        <Label layoutX="130.0" text="Клиент">
+            <font>
+                <Font size="20.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="pathFieldClient" editable="false" layoutX="15.0" layoutY="30.0" prefHeight="25.0"
+                   prefWidth="255.0"/>
+        <TextField fx:id="pathFieldCloud" editable="false" layoutX="330.0" layoutY="30.0" prefHeight="25.0"
+                   prefWidth="255.0"/>
+    </AnchorPane>
+</AnchorPane>
