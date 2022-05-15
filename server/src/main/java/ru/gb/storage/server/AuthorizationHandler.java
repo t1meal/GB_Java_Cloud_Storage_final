@@ -8,7 +8,7 @@ public class AuthorizationHandler extends SimpleChannelInboundHandler<Authorizat
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, AuthorizationMessage msg) {
         System.out.println("New authorization message!");
-        msg.setAuthorizationStatus(msg.getLogin().equals("l1") && msg.getPassword().equals("p1"));
+        msg.setAuthorizationStatus(msg.getLogin().equals("login1") && msg.getPassword().equals("pass1"));
         ctx.writeAndFlush(msg);
     }
 }
