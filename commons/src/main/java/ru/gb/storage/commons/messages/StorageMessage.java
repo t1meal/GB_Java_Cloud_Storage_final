@@ -8,6 +8,8 @@ import java.util.List;
 public class StorageMessage extends Message {
     private String path;
     private List<FilesInfo> list;
+    private String nick;
+    private Integer initialStatus = 0;
 
     public StorageMessage() {
     }
@@ -28,4 +30,10 @@ public class StorageMessage extends Message {
     public void setPath(String path) {
         this.path = path;
     }
+    public String getNick() {return nick;}
+    public void setNick(String nick) {this.nick = nick;}
+
+    public Integer getInitialStatus() {return initialStatus;}
+
+    public void setInitialStatus(Integer initialStatus) {this.initialStatus = initialStatus;}
 }

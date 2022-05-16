@@ -1,4 +1,4 @@
-package ru.gb.storage.client;
+package ru.gb.storage.client.fx;
 
 import javafx.application.Platform;
 import javafx.beans.property.*;
@@ -6,14 +6,19 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import ru.gb.storage.client.handlers.ClientHandler;
+import ru.gb.storage.client.servises.InitTable;
+import ru.gb.storage.client.servises.NetworkController;
 import ru.gb.storage.commons.FilesInfo;
 import ru.gb.storage.commons.messages.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class MainController {
     @FXML
@@ -36,6 +41,10 @@ public class MainController {
     private static BooleanProperty isAuthorized;
     private final Path clientPath = FileSystems.getDefault().getRootDirectories().iterator().next();
     private final InitTable initTable = new InitTable();
+    private String currentNick;
+    private String primaryCloudPath;
+
+
     @FXML
     void initialize() {
         isAuthorized = new SimpleBooleanProperty(false);
@@ -52,7 +61,6 @@ public class MainController {
     private void tryToAuth() {
         System.out.println("Запрос авторизации к серверу!");
         NetworkController.send(new AuthorizationMessage(loginField.getText(), passwordField.getText()));
-        NetworkController.send(new StorageMessage(null));
         loginField.clear();
         passwordField.clear();
     }
@@ -83,9 +91,34 @@ public class MainController {
     }
     @FXML
     private void deleteCloudFile (){
-        FilesInfo file = cloudTable.getSelectionModel().getSelectedItem();
-        Path deletePath = Paths.get(pathFieldCloud.getText()).resolve(file.getName());
-        NetworkController.send(new FileDeleteMessage(deletePath));
+        String fileName = cloudTable.getSelectionModel().getSelectedItem().getName();
+        if (fileName != null){
+            Path deletePath = Paths.get(pathFieldCloud.getText()).resolve(fileName);
+            NetworkController.send(new FileDeleteMessage(deletePath));
+        } else {
+            new Alert(Alert.AlertType.ERROR,  "Выберите файл!").showAndWait();
+        }
+    }
+    @FXML
+    private void createClientDir (){
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Создание каталога");
+        dialog.setHeaderText("Введите название каталога");
+
+        Optional<String> text = dialog.showAndWait();
+        Path path = Paths.get(pathFieldClient.getText()).resolve(text.get());
+        new File(path.toString()).mkdir();
+        refreshClientTable(Paths.get(pathFieldClient.getText()));
+    }
+    @FXML
+    private void createCloudDir (){
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Создание каталога");
+        dialog.setHeaderText("Введите название каталога");
+
+        Optional<String> text = dialog.showAndWait();
+        Path path = Paths.get(pathFieldCloud.getText()).resolve(text.get());
+        NetworkController.send(new FileCreateMessage(path));
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FXML
@@ -99,6 +132,11 @@ public class MainController {
     }
     public void upToCloudDirectory (){
         String upPath = Paths.get(pathFieldCloud.getText()).getParent().toString();
+        String bannedCloudPath = Paths.get(primaryCloudPath).getParent().toString();
+        if (upPath.equals(bannedCloudPath)){
+            new Alert(Alert.AlertType.ERROR, "Доступ запрещен!").showAndWait();
+            return;
+        }
         NetworkController.send(new StorageMessage(upPath));
     }
     public void refreshCloudTable(List<FilesInfo> storageList) {
@@ -169,4 +207,7 @@ public class MainController {
     public void setCloudPath(String path) {
         pathFieldCloud.setText(path);
     }
+    public void setCurrentNick(String currentNick) {this.currentNick = currentNick;}
+    public String getPrimaryCloudPath() {return primaryCloudPath;}
+    public void setPrimaryCloudPath(String primaryCloudPath) {this.primaryCloudPath = primaryCloudPath;}
 }

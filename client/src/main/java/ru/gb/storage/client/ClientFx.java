@@ -1,12 +1,11 @@
 package ru.gb.storage.client;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+import ru.gb.storage.client.servises.NetworkController;
 
 public class ClientFx extends Application {
     private final double WIDTH = 600;

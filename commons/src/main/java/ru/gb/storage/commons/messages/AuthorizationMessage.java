@@ -9,6 +9,8 @@ public class AuthorizationMessage extends Message {
     private String password;
     @JsonProperty("authorizationStatus")
     private boolean authorizationStatus;
+    @JsonProperty("nick")
+    private String nick;
 
     public AuthorizationMessage(String login, String password) {
         this.login = login;
@@ -34,6 +36,9 @@ public class AuthorizationMessage extends Message {
         this.authorizationStatus = status;
     }
 
+    public String getNick() {return nick;}
+
+    public void setNick(String nick) {this.nick = nick;}
 }
 
 

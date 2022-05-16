@@ -7,7 +7,7 @@
     <groupId>ru.gb.network-storage</groupId>
     <artifactId>root</artifactId>
     <version>DEV-SNAPSHOT</version>
-    <description>Template for network storage</description>
+    <description>Network storage</description>
     <packaging>pom</packaging>
 
     <properties>

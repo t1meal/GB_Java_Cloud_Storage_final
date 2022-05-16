@@ -1,4 +1,4 @@
-package ru.gb.storage.client;
+package ru.gb.storage.client.servises;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -8,11 +8,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import javafx.concurrent.Task;
+import ru.gb.storage.client.handlers.ClientHandler;
 import ru.gb.storage.commons.handlers.JSonDecoder;
 import ru.gb.storage.commons.handlers.JSonEncoder;
 import ru.gb.storage.commons.messages.Message;
 import java.net.InetSocketAddress;
-import java.util.Objects;
 
 public class NetworkController {
 
@@ -72,16 +72,11 @@ public class NetworkController {
                                                 new LengthFieldPrepender(3),
                                                 new JSonDecoder(),
                                                 new JSonEncoder(),
-                                                new AuthorizationHandlerClient(),
                                                 ClientHandler.getInstance()
                                         );
                                     }
                                 });
-
                         System.out.println("Client started");
-//                        Channel channel1 = bootstrap.connect(INET_HOST, PORT).sync().channel();
-//                        channel1.closeFuture().sync();
-//                        channel1.writeAndFlush(new TextMessage());
                         ChannelFuture future = bootstrap.connect();
                         future.sync();
                         Channel chn = future.channel();

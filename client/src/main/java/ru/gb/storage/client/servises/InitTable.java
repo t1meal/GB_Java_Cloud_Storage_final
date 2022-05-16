@@ -1,4 +1,4 @@
-package ru.gb.storage.client;
+package ru.gb.storage.client.servises;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

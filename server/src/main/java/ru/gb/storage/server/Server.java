@@ -11,11 +11,11 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import ru.gb.storage.commons.handlers.JSonDecoder;
 import ru.gb.storage.commons.handlers.JSonEncoder;
+import ru.gb.storage.server.handlers.AuthorizationHandler;
+import ru.gb.storage.server.handlers.MainServerHandler;
 
-import java.io.IOException;
 
-
-public class Server {
+class Server {
     private final int port;
 
     public static void main(String[] args) throws InterruptedException {
@@ -44,7 +44,7 @@ public class Server {
                                     new JSonDecoder(),
                                     new JSonEncoder(),
                                     new AuthorizationHandler(),
-                                    new FirstServerHandler());
+                                    new MainServerHandler());
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)

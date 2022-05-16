@@ -1,12 +1,11 @@
-package ru.gb.storage.client;
+package ru.gb.storage.client.handlers;
 
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import ru.gb.storage.commons.messages.FileContentMessage;
-import ru.gb.storage.commons.messages.FileSendMessage;
-import ru.gb.storage.commons.messages.Message;
-import ru.gb.storage.commons.messages.StorageMessage;
+import ru.gb.storage.client.fx.MainController;
+import ru.gb.storage.client.servises.NetworkController;
+import ru.gb.storage.commons.messages.*;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -30,14 +29,29 @@ public class ClientHandler extends SimpleChannelInboundHandler<Message> {
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-    }
+    public void channelActive(ChannelHandlerContext ctx) {System.out.println("Channel is active!");}
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
         System.out.println("New message " + msg.getClass().toString());
+
+        if (msg instanceof AuthorizationMessage){
+            AuthorizationMessage message = (AuthorizationMessage) msg;
+            if (message.getAuthorizationStatus()){
+                StorageMessage storageMessage = new StorageMessage(null);
+                String nick = message.getNick();
+                storageMessage.setNick(nick);
+                MainController.setIsAuthorized(true);
+                mainController.setCurrentNick(nick);
+                System.out.println("Авторизация прошла успешно!");
+                ctx.writeAndFlush(storageMessage);
+            }
+        }
         if (msg instanceof StorageMessage){
             StorageMessage storageMessage = (StorageMessage) msg;
+            if (storageMessage.getInitialStatus() == 1) {
+                mainController.setPrimaryCloudPath(storageMessage.getPath());
+            }
             mainController.refreshCloudTable(storageMessage.getList());
             mainController.setCloudPath(storageMessage.getPath());
         }

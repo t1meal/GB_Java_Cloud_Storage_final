@@ -1,4 +1,4 @@
-package ru.gb.storage.server;
+package ru.gb.storage.server.handlers;
 
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -6,6 +6,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import ru.gb.storage.commons.FilesInfo;
 import ru.gb.storage.commons.messages.*;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -14,8 +15,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstServerHandler extends SimpleChannelInboundHandler<Message> {
-    private final Path rootPath = Paths.get("server\\src\\main\\java\\resources");
+public class MainServerHandler extends SimpleChannelInboundHandler<Message> {
+    private Path mainPath;
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
@@ -28,8 +29,14 @@ public class FirstServerHandler extends SimpleChannelInboundHandler<Message> {
         if (msg instanceof StorageMessage) {
             StorageMessage storageMessage = (StorageMessage) msg;
             if (storageMessage.getPath() == null){
-                storageMessage.setList(fillingCloudList(rootPath));
-                storageMessage.setPath(rootPath.toString());
+                Path rootPath = Paths.get("storage");
+                new File(rootPath.toString()).mkdir();
+                Path userPath = Paths.get(rootPath.toString()).resolve(storageMessage.getNick());
+                new File(userPath.toString()).mkdir();
+                mainPath = userPath;
+                storageMessage.setList(fillingCloudList(userPath));
+                storageMessage.setPath(userPath.toString());
+                storageMessage.setInitialStatus(1);
             } else {
                 Path updatePath = Paths.get(storageMessage.getPath());
                 storageMessage.setList(fillingCloudList(updatePath));
@@ -47,7 +54,7 @@ public class FirstServerHandler extends SimpleChannelInboundHandler<Message> {
         }
         if (msg instanceof FileContentMessage) {
             FileContentMessage fileContentMessage = (FileContentMessage) msg;
-            String fullPath = rootPath.resolve(Paths.get(fileContentMessage.getName())).toString();
+            String fullPath = mainPath.resolve(Paths.get(fileContentMessage.getName())).toString();
             RandomAccessFile accessFile = new RandomAccessFile(fullPath, "rw");
             System.out.println(fileContentMessage.getStartPosition());
             accessFile.seek(fileContentMessage.getStartPosition());
@@ -69,6 +76,14 @@ public class FirstServerHandler extends SimpleChannelInboundHandler<Message> {
                 storageMessage.setList(fillingCloudList(currentPath));
                 ctx.writeAndFlush(storageMessage);
             }
+        }
+        if (msg instanceof FileCreateMessage){
+            FileCreateMessage message = (FileCreateMessage) msg;
+            Path path = message.getCreatePath();
+            new File(path.toString()).mkdir();
+            StorageMessage storageMessage = new StorageMessage(path.getParent().toString());
+            storageMessage.setList(fillingCloudList(path.getParent()));
+            ctx.writeAndFlush(storageMessage);
         }
     }
     @Override
