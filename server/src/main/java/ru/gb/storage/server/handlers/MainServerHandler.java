@@ -45,8 +45,7 @@ public class MainServerHandler extends SimpleChannelInboundHandler<Message> {
         if (msg instanceof FileRequestMessage) {
             FileRequestMessage fileRequestMessage = (FileRequestMessage) msg;
             String fullPath = Paths.get(fileRequestMessage.getPath()).resolve(fileRequestMessage.getName()).toString();
-            String filePath = fileRequestMessage.getPath();
-            if (filePath != null) {
+            if (fullPath != null) {
                 RandomAccessFile randomAccessFile = new RandomAccessFile(fullPath, "r");
                 sendFile(randomAccessFile, ctx, fileRequestMessage.getName());
             }
@@ -57,7 +56,7 @@ public class MainServerHandler extends SimpleChannelInboundHandler<Message> {
             String fullPath = Paths.get(currentCloudPath).resolve(fileContentMessage.getName()).toString();
             RandomAccessFile accessFile = new RandomAccessFile(fullPath, "rw");
             if (fileContentMessage.isLast()){
-                System.out.println(fileContentMessage.getStartPosition());
+                System.out.println((fileContentMessage.getStartPosition()/1000) + "Kbs");
                 accessFile.seek(fileContentMessage.getStartPosition());
                 accessFile.write(fileContentMessage.getContent());
                 accessFile.close();
@@ -65,7 +64,7 @@ public class MainServerHandler extends SimpleChannelInboundHandler<Message> {
                 storageMessage.setList(fillingCloudList(Paths.get(currentCloudPath)));
                 ctx.writeAndFlush(storageMessage);
             } else {
-                System.out.println(fileContentMessage.getStartPosition());
+                System.out.println((fileContentMessage.getStartPosition()/1000) + "Kbs");
                 accessFile.seek(fileContentMessage.getStartPosition());
                 accessFile.write(fileContentMessage.getContent());
 

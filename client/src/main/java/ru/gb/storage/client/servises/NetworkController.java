@@ -21,12 +21,8 @@ public class NetworkController {
         private final String INET_HOST = "localhost";
         private static boolean connected;
         private static Channel channel;
-        private NioEventLoopGroup group;
+        private static NioEventLoopGroup group;
 
-
-
-
-//      4. метод отправки сообщений серверу
         public static void send(Message message){
                 if(!connected) {
                     return;
@@ -46,7 +42,6 @@ public class NetworkController {
                 new Thread(task).start();
         }
 
-//      1. первичный метод установления соединения с сервером
         public void connect() {
             if (connected){
                 return;
@@ -98,8 +93,7 @@ public class NetworkController {
             new Thread(task).start();
         }
 
-//  2. метод дисконекта подключения.
-    public void disconnect() {
+    public static void disconnect() {
             if (!connected){
                 return;
             }

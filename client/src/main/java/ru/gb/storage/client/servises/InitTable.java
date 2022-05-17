@@ -20,7 +20,7 @@ public class InitTable {
     public void constructTable(TableView<FilesInfo> table) {
         TableColumn<FilesInfo, String> columnName = new TableColumn<>("Имя");
         columnName.setCellValueFactory(filesInfoStringCellDataFeatures -> new SimpleStringProperty(filesInfoStringCellDataFeatures.getValue().getName()));
-        columnName.setPrefWidth(200);
+        columnName.setPrefWidth(220);
 
         TableColumn<FilesInfo, Long> columnSize = new TableColumn<>("Размер");
         columnSize.setCellValueFactory(filesInfoLongCellDataFeatures -> new SimpleObjectProperty<>(filesInfoLongCellDataFeatures.getValue().getSize()));

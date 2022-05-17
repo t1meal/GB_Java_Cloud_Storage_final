@@ -13,7 +13,6 @@ public class StorageMessage extends Message {
 
     public StorageMessage() {
     }
-
     public StorageMessage(String path) {
         this.path = path;
     }
@@ -32,8 +31,6 @@ public class StorageMessage extends Message {
     }
     public String getNick() {return nick;}
     public void setNick(String nick) {this.nick = nick;}
-
     public Integer getInitialStatus() {return initialStatus;}
-
     public void setInitialStatus(Integer initialStatus) {this.initialStatus = initialStatus;}
 }

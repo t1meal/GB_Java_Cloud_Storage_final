@@ -204,7 +204,5 @@ public class MainController {
     public void setCloudPath(String path) {
         pathFieldCloud.setText(path);
     }
-//    public void setCurrentNick(String currentNick) {this.currentNick = currentNick;}
-//    public String getPrimaryCloudPath() {return primaryCloudPath;}
     public void setPrimaryCloudPath(String primaryCloudPath) {this.primaryCloudPath = primaryCloudPath;}
 }

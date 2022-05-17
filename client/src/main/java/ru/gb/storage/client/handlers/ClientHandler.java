@@ -63,13 +63,13 @@ public class ClientHandler extends SimpleChannelInboundHandler<Message> {
 
             RandomAccessFile accessFile = new RandomAccessFile(fullPath, "rw");
             if (contentMessage.isLast()){
-                System.out.println(contentMessage.getStartPosition());
+                System.out.println((contentMessage.getStartPosition()/1000) + "Kbs");
                 accessFile.seek(contentMessage.getStartPosition());
                 accessFile.write(contentMessage.getContent());
                 mainController.refreshClientTable(Paths.get(currentPath));
                 accessFile.close();
             } else {
-                System.out.println(contentMessage.getStartPosition());
+                System.out.println((contentMessage.getStartPosition()/1000) + "Kbs");
                 accessFile.seek(contentMessage.getStartPosition());
                 accessFile.write(contentMessage.getContent());
                 mainController.refreshClientTable(Paths.get(currentPath));
@@ -110,7 +110,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<Message> {
         if (last) {
             ctx.writeAndFlush(fileContentMessage);
             randomAccessFile.close();
-//            NetworkController.send(new StorageMessage(currentCloudPath));
         }
     }
 }

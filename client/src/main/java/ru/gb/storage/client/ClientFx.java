@@ -8,9 +8,6 @@ import javafx.stage.Stage;
 import ru.gb.storage.client.servises.NetworkController;
 
 public class ClientFx extends Application {
-    private final double WIDTH = 600;
-    private final double HEIGHT = 600;
-
 
     public static void main(String[] args) {
        launch(args);
@@ -25,6 +22,7 @@ public class ClientFx extends Application {
 
         primaryStage.setOnCloseRequest(windowEvent -> {
             System.out.println("Application is closing!");
+            NetworkController.disconnect();
             primaryStage.close();
             System.exit(1);
         });

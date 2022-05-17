@@ -24,8 +24,6 @@ public class FileRequestMessage extends Message {
         this.path = path;
     }
     public String getPath () {return path;}
-
-
     public String getName() {
         return name;
     }

@@ -8,8 +8,5 @@ import io.netty.channel.ChannelHandlerContext;
         property = "type"
 )
 public abstract class Message {
-
-//    public abstract void handle(ChannelHandlerContext ctx) throws Exception;
-
 }
 
