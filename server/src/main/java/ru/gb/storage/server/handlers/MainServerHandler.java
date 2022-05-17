@@ -6,7 +6,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import ru.gb.storage.commons.FilesInfo;
 import ru.gb.storage.commons.messages.*;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -33,7 +32,7 @@ public class MainServerHandler extends SimpleChannelInboundHandler<Message> {
                 new File(rootPath.toString()).mkdir();
                 Path userPath = Paths.get(rootPath.toString()).resolve(storageMessage.getNick());
                 new File(userPath.toString()).mkdir();
-                mainPath = userPath;
+                setMainPath(userPath);
                 storageMessage.setList(fillingCloudList(userPath));
                 storageMessage.setPath(userPath.toString());
                 storageMessage.setInitialStatus(1);
@@ -54,24 +53,36 @@ public class MainServerHandler extends SimpleChannelInboundHandler<Message> {
         }
         if (msg instanceof FileContentMessage) {
             FileContentMessage fileContentMessage = (FileContentMessage) msg;
-            String fullPath = mainPath.resolve(Paths.get(fileContentMessage.getName())).toString();
+            String currentCloudPath = fileContentMessage.getCurrentCloudPath();
+            String fullPath = Paths.get(currentCloudPath).resolve(fileContentMessage.getName()).toString();
             RandomAccessFile accessFile = new RandomAccessFile(fullPath, "rw");
-            System.out.println(fileContentMessage.getStartPosition());
-            accessFile.seek(fileContentMessage.getStartPosition());
-            accessFile.write(fileContentMessage.getContent());
+            if (fileContentMessage.isLast()){
+                System.out.println(fileContentMessage.getStartPosition());
+                accessFile.seek(fileContentMessage.getStartPosition());
+                accessFile.write(fileContentMessage.getContent());
+                accessFile.close();
+                StorageMessage storageMessage = new StorageMessage(currentCloudPath);
+                storageMessage.setList(fillingCloudList(Paths.get(currentCloudPath)));
+                ctx.writeAndFlush(storageMessage);
+            } else {
+                System.out.println(fileContentMessage.getStartPosition());
+                accessFile.seek(fileContentMessage.getStartPosition());
+                accessFile.write(fileContentMessage.getContent());
+
+            }
         }
         if(msg instanceof FileSendMessage){
             FileSendMessage message = (FileSendMessage) msg;
-            if(message.getPath() != null && message.getFileName() != null){
+            if(message.getFilePath() != null && message.getFileName() != null){
                 ctx.writeAndFlush(message);
             }
         }
         if (msg instanceof FileDeleteMessage){
             FileDeleteMessage fileDeleteMessage = (FileDeleteMessage) msg;
-            Path deletePath = fileDeleteMessage.getDeletePath();
+            String deletePath = fileDeleteMessage.getDeletePath();
             if (deletePath != null){
-                deleteFile(deletePath);
-                Path currentPath = deletePath.getParent();
+                deleteFile(Paths.get(deletePath));
+                Path currentPath = Paths.get(deletePath).getParent();
                 StorageMessage storageMessage = new StorageMessage(currentPath.toString());
                 storageMessage.setList(fillingCloudList(currentPath));
                 ctx.writeAndFlush(storageMessage);
@@ -79,8 +90,8 @@ public class MainServerHandler extends SimpleChannelInboundHandler<Message> {
         }
         if (msg instanceof FileCreateMessage){
             FileCreateMessage message = (FileCreateMessage) msg;
-            Path path = message.getCreatePath();
-            new File(path.toString()).mkdir();
+            Path path = Paths.get(message.getCreatePath()) ;
+            new File(message.getCreatePath()).mkdir();
             StorageMessage storageMessage = new StorageMessage(path.getParent().toString());
             storageMessage.setList(fillingCloudList(path.getParent()));
             ctx.writeAndFlush(storageMessage);
@@ -119,6 +130,7 @@ public class MainServerHandler extends SimpleChannelInboundHandler<Message> {
             }
         });
         if (last) {
+            ctx.writeAndFlush(contentMessage);
             randomAccessFile.close();
         }
     }
@@ -149,6 +161,13 @@ public class MainServerHandler extends SimpleChannelInboundHandler<Message> {
             }
         }
         return listFiles;
+    }
+
+    private Path getMainPath() {
+        return mainPath;
+    }
+    private void setMainPath(Path mainPath) {
+        this.mainPath = mainPath;
     }
 }
 

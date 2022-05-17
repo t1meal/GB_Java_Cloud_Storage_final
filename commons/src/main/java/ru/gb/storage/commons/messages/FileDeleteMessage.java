@@ -3,15 +3,15 @@ package ru.gb.storage.commons.messages;
 import java.nio.file.Path;
 
 public class FileDeleteMessage extends Message{
-    private Path deletePath;
+    private String deletePath;
 
     public FileDeleteMessage() {
     }
-    public FileDeleteMessage(Path deletePath) {
+    public FileDeleteMessage(String deletePath) {
         this.deletePath = deletePath;
     }
 
-    public Path getDeletePath() {
+    public String getDeletePath() {
         return deletePath;
     }
 }

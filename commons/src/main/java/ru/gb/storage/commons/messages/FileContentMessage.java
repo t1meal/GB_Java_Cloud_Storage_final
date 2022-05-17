@@ -4,6 +4,7 @@ public class FileContentMessage extends Message {
     private String name;
     private byte[] content;
     private long startPosition;
+    private String currentCloudPath;
 
     public FileContentMessage() {
     }
@@ -37,8 +38,13 @@ public class FileContentMessage extends Message {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
+
+    public String getCurrentCloudPath() {return currentCloudPath;}
+
+    public void setCurrentCloudPath(String currentCloudPath) {this.currentCloudPath = currentCloudPath;}
 }
 

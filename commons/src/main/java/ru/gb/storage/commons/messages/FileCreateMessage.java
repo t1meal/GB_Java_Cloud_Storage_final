@@ -3,15 +3,15 @@ package ru.gb.storage.commons.messages;
 import java.nio.file.Path;
 
 public class FileCreateMessage extends Message {
-    private Path createPath;
+    private String createPath;
 
     public FileCreateMessage() {
     }
     public FileCreateMessage(Path createPath) {
-        this.createPath = createPath;
+        this.createPath = createPath.toString();
     }
 
-    public Path getCreatePath() {
+    public String getCreatePath() {
         return createPath;
     }
 }

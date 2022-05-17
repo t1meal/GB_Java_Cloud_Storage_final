@@ -1,28 +1,30 @@
 package ru.gb.storage.commons.messages;
 
+import java.nio.file.Path;
+
 public class FileSendMessage extends Message {
-    String path;
+    String filePath;
     String fileName;
-    String currentPath;
+    String currentCloudPath;
 
     public FileSendMessage() {
     }
 
-    public FileSendMessage(String path, String fileName, String currentPath) {
-        this.path = path;
+    public FileSendMessage(Path filePath, String fileName, Path currentCloudPath) {
+        this.filePath = filePath.toString();
         this.fileName = fileName;
-        this.currentPath = currentPath;
+        this.currentCloudPath = currentCloudPath.toString();
     }
 
-    public String getPath() {
-        return path;
+    public String getFilePath() {
+        return filePath;
     }
 
     public String getFileName() {
         return fileName;
     }
 
-    public String getCurrentPath() {
-        return currentPath;
+    public String getCurrentCloudPath() {
+        return currentCloudPath;
     }
 }

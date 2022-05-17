@@ -41,9 +41,7 @@ public class MainController {
     private static BooleanProperty isAuthorized;
     private final Path clientPath = FileSystems.getDefault().getRootDirectories().iterator().next();
     private final InitTable initTable = new InitTable();
-    private String currentNick;
     private String primaryCloudPath;
-
 
     @FXML
     void initialize() {
@@ -66,16 +64,15 @@ public class MainController {
     }
     @FXML
     private void sendToCloud() {
-        String clientFilePath = clientTable.getSelectionModel().getSelectedItem().getPath().toString();
-        String clientFileName = clientTable.getSelectionModel().getSelectedItem().getName();
-        String currentCloudPath = pathFieldCloud.getText();
-        NetworkController.send(new FileSendMessage(clientFilePath,clientFileName, currentCloudPath));
+        Path clientFilePath = clientTable.getSelectionModel().getSelectedItem().getPath();
+        String fileName = clientTable.getSelectionModel().getSelectedItem().getName();
+        Path currentCloudPath = Paths.get(pathFieldCloud.getText());
+        NetworkController.send(new FileSendMessage(clientFilePath, fileName, currentCloudPath));
     }
     @FXML
     private void downloadFromCloud() {
         String fileName = cloudTable.getSelectionModel().getSelectedItem().getName();
         String downloadFilePath = pathFieldCloud.getText();
-//        String reqPath = Paths.get(pathFieldServer.getText(), fileName).toString();
         NetworkController.send(new FileRequestMessage(downloadFilePath, fileName));
     }
     @FXML
@@ -93,7 +90,7 @@ public class MainController {
     private void deleteCloudFile (){
         String fileName = cloudTable.getSelectionModel().getSelectedItem().getName();
         if (fileName != null){
-            Path deletePath = Paths.get(pathFieldCloud.getText()).resolve(fileName);
+            String deletePath = Paths.get(pathFieldCloud.getText()).resolve(fileName).toString();
             NetworkController.send(new FileDeleteMessage(deletePath));
         } else {
             new Alert(Alert.AlertType.ERROR,  "Выберите файл!").showAndWait();
@@ -207,7 +204,7 @@ public class MainController {
     public void setCloudPath(String path) {
         pathFieldCloud.setText(path);
     }
-    public void setCurrentNick(String currentNick) {this.currentNick = currentNick;}
-    public String getPrimaryCloudPath() {return primaryCloudPath;}
+//    public void setCurrentNick(String currentNick) {this.currentNick = currentNick;}
+//    public String getPrimaryCloudPath() {return primaryCloudPath;}
     public void setPrimaryCloudPath(String primaryCloudPath) {this.primaryCloudPath = primaryCloudPath;}
 }
